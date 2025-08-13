@@ -1,6 +1,8 @@
-﻿namespace Carquitecture.Application.Repositories;
+﻿using Carquitecture.Domain;
+
+namespace Carquitecture.Application.Repositories;
 
 public interface IVehicleRepository
 {
-    // Add interfaces methods
+   Task<int> CreateAsync(Vehicle vehicle, CancellationToken cancellationToken);
 }
