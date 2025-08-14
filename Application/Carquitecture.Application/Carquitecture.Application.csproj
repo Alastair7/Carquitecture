@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Vehicles\GetVehicles\" />
     <Folder Include="Features\Vehicles\GetSingleVehicle\" />
     <Folder Include="Features\Vehicles\DeleteVehicle\" />
     <Folder Include="Features\Vehicles\UpdateVehicle\" />

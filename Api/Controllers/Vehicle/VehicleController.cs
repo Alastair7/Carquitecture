@@ -1,5 +1,6 @@
 ﻿using Carquitecture.API.Controllers.Vehicle.Requests;
 using Carquitecture.Application.Features.Vehicles.CreateVehicle.Commands;
+using Carquitecture.Application.Features.Vehicles.GetVehicles.Queries;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Carquitecture.API.Controllers.Vehicle;
@@ -10,11 +11,15 @@ public class VehicleController : ControllerBase
 {
     // Mediator pattern solves this problem?
     private readonly ICreateVehicleCommandHandler _createVehicleHandler;
+    private readonly IGetAllVehiclesQueryHandler _getAllVehiclesHandler;
 
-    public VehicleController(ICreateVehicleCommandHandler createVehicleHandler)
+    public VehicleController(ICreateVehicleCommandHandler createVehicleHandler, IGetAllVehiclesQueryHandler getAllVehiclesHandler)
     {
         ArgumentNullException.ThrowIfNull(createVehicleHandler, nameof(createVehicleHandler));
         _createVehicleHandler = createVehicleHandler;
+
+        ArgumentNullException.ThrowIfNull(getAllVehiclesHandler, nameof(getAllVehiclesHandler));
+        _getAllVehiclesHandler = getAllVehiclesHandler;
     }
 
     [HttpPost]
@@ -33,35 +38,11 @@ public class VehicleController : ControllerBase
         return Created($"/api/vehicle/{id}", id);
     }
 
-    [HttpPut()]
-    public IActionResult Update(int id, [FromBody] object vehicle)
-    {
-        // This method should handle the update of an existing vehicle.
-        // For now, we will return a placeholder response.
-        return Ok(new { Id = id, Message = "Vehicle updated" });
-    }
-
-    [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
-    {
-        // This method should handle the deletion of a vehicle by its ID.
-        // For now, we will return a placeholder response.
-        return Ok(new { Id = id, Message = "Vehicle deleted" });
-    }
-
-    [HttpGet("{id}")]
-    public IActionResult GetSingle(int id)
-    {
-        // This method should return a specific vehicle by its ID.
-        // For now, we will return a placeholder response.
-        return Ok(new { Id = id, Message = "Vehicle details" });
-    }
-
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
-        // This method should return a list of vehicles.
-        // For now, we will return a placeholder response.
-        return Ok(new { Message = "List of vehicles" });
+        var result = await _getAllVehiclesHandler.HandleAsync(cancellationToken);
+
+        return Ok(result);
     }
 }

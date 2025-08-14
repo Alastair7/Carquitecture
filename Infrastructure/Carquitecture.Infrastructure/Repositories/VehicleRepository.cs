@@ -1,6 +1,7 @@
 ﻿using Carquitecture.Application.Repositories;
 using Carquitecture.Domain;
 using Carquitecture.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Carquitecture.Infrastructure.Repositories;
 
@@ -19,5 +20,12 @@ public class VehicleRepository : IVehicleRepository
         await _context.SaveChangesAsync(cancellationToken);
 
         return vehicle.Id;
+    }
+
+    public async Task<IEnumerable<Vehicle>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        var vehicles = await _context.Vehicles.ToListAsync(cancellationToken);
+
+        return vehicles;
     }
 }
