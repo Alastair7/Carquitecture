@@ -12,6 +12,7 @@ builder.Services.AddDbConfiguration(builder.Configuration);
 
 builder.Services.AddControllers();
 
+
 builder.Services.AddScoped<ICreateVehicleCommandHandler, CreateVehicleCommandHandler>();
 builder.Services.AddScoped<IGetAllVehiclesQueryHandler, GetAllVehiclesQueryHandler>();
 

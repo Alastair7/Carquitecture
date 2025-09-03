@@ -15,8 +15,8 @@ public class VehicleRepository : IVehicleRepository
     }
 
     public async Task<int> CreateAsync(Vehicle vehicle, CancellationToken cancellationToken)
-    {
-        _context.Vehicles.Add(vehicle);
+    {  
+        await _context.Vehicles.AddAsync(vehicle);
         await _context.SaveChangesAsync(cancellationToken);
 
         return vehicle.Id;
@@ -24,6 +24,8 @@ public class VehicleRepository : IVehicleRepository
 
     public async Task<IEnumerable<Vehicle>> GetAllAsync(CancellationToken cancellationToken)
     {
+        // TODO: Investigate about as not tracking.
+        // TODO: Test Update with as not tracking.
         var vehicles = await _context.Vehicles.ToListAsync(cancellationToken);
 
         return vehicles;

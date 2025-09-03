@@ -9,7 +9,7 @@ namespace Carquitecture.API.Controllers.Vehicle;
 [Route("api/[controller]")]
 public class VehicleController : ControllerBase
 {
-    // Mediator pattern solves this problem?
+
     private readonly ICreateVehicleCommandHandler _createVehicleHandler;
     private readonly IGetAllVehiclesQueryHandler _getAllVehiclesHandler;
 
