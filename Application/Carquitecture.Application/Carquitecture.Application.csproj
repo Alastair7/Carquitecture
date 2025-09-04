@@ -7,12 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Vehicles\GetSingleVehicle\" />
-    <Folder Include="Features\Vehicles\DeleteVehicle\" />
-    <Folder Include="Features\Vehicles\UpdateVehicle\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Domain\Carquitecture.Domain\Carquitecture.Domain.csproj" />
   </ItemGroup>
 

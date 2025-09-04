@@ -14,9 +14,6 @@ public class VehicleContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // TODO: Investigate about how to run de migration to create the DB in Postgres.
-
-        // TODO: Use specific model builder class (not defined in this class). Investigate.
         new VehicleEntityTypeConfiguration().Configure(modelBuilder.Entity<Vehicle>());
     }
 }

@@ -16,10 +16,16 @@ public class VehicleRepository : IVehicleRepository
 
     public async Task<int> CreateAsync(Vehicle vehicle, CancellationToken cancellationToken)
     {  
-        await _context.Vehicles.AddAsync(vehicle);
+        await _context.Vehicles.AddAsync(vehicle, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
 
         return vehicle.Id;
+    }
+
+    public async Task DeleteAsync(Vehicle vehicle, CancellationToken cancellationToken)
+    {
+         _context.Remove(vehicle);
+        await _context.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<IEnumerable<Vehicle>> GetAllAsync(CancellationToken cancellationToken)
@@ -29,5 +35,19 @@ public class VehicleRepository : IVehicleRepository
         var vehicles = await _context.Vehicles.ToListAsync(cancellationToken);
 
         return vehicles;
+    }
+
+    public async Task<Vehicle?> GetById(int id, CancellationToken cancellationToken)
+    {
+        var vehicle = await _context.Vehicles.FirstOrDefaultAsync(v => v.Id == id, cancellationToken);
+        
+        return vehicle;
+    }
+
+    public async Task UpdateAsync(Vehicle vehicle, CancellationToken cancellationToken)
+    {
+        _context.Vehicles.Update(vehicle);
+
+        await  _context.SaveChangesAsync(cancellationToken);
     }
 }
