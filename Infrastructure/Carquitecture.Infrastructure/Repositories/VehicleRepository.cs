@@ -46,8 +46,10 @@ public class VehicleRepository : IVehicleRepository
 
     public async Task UpdateAsync(Vehicle vehicle, CancellationToken cancellationToken)
     {
+        // Search alternatives to update entity
         _context.Vehicles.Update(vehicle);
 
+        // Implement Unit of Work and avoid using save changes async
         await  _context.SaveChangesAsync(cancellationToken);
     }
 }

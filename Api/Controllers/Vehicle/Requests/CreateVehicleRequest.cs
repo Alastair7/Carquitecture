@@ -2,7 +2,6 @@
 
 public class CreateVehicleRequest
 {
-    public required int Id { get; set; }
     
     public required string LicensePlate { get; set; }
     

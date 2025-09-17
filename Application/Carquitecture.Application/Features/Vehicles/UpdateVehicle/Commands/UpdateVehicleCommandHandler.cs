@@ -18,6 +18,7 @@ public class UpdateVehicleCommandHandler : IUpdateVehicleCommandHandler
     {
         var vehicle = await _vehicleRepository.GetById(command.Id, cancellationToken);
 
+        // Check exception performance and investigate and integrate result pattern.
         if (vehicle is null)
         { 
             throw new Exception($"Vehicle with id {command.Id} not found.");

@@ -47,7 +47,6 @@ public class VehicleController : ControllerBase
     {
         var command = new CreateVehicleCommand()
         {
-            Id = request.Id,
             LicensePlate = request.LicensePlate,
             Type = request.Type,
             Owner = request.Owner
@@ -74,6 +73,7 @@ public class VehicleController : ControllerBase
         return result is null ? NotFound(id) : Ok(result);
     }
 
+    // Add ID to route.
     [HttpPut]
     public async Task<IActionResult> Update([FromBody] UpdateVehicleRequest request, CancellationToken cancellationToken)
     {

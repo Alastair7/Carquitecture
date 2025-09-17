@@ -16,7 +16,7 @@ public class CreateVehicleCommandHandler : ICreateVehicleCommandHandler
 
     public async Task<int> HandleAsync(CreateVehicleCommand command, CancellationToken cancellationToken)
     {
-        var vehicle = new Vehicle(command.Id, command.LicensePlate, command.Type, command.Owner);
+        var vehicle = new Vehicle(command.LicensePlate, command.Type, command.Owner);
 
         return await _vehicleRepository.CreateAsync(vehicle, cancellationToken);
     }

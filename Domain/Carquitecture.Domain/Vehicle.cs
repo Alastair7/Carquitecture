@@ -2,6 +2,12 @@
 
 public class Vehicle
 {
+    public Vehicle(string licensePlate, string type, string owner) {
+        LicensePlate = licensePlate;
+        Type = type;
+        Owner = owner;
+    }
+
     public Vehicle(int id, string licensePlate, string type, string owner)
     {
         Id = id;
