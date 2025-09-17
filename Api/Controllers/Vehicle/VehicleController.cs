@@ -74,12 +74,12 @@ public class VehicleController : ControllerBase
     }
 
     // Add ID to route.
-    [HttpPut]
-    public async Task<IActionResult> Update([FromBody] UpdateVehicleRequest request, CancellationToken cancellationToken)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, [FromBody] UpdateVehicleRequest request, CancellationToken cancellationToken)
     {
         var command = new UpdateVehicleCommand()
         {
-            Id = request.Id,
+            Id = id,
             LicensePlate = request.LicensePlate,
             Type = request.Type,
             Owner = request.Owner

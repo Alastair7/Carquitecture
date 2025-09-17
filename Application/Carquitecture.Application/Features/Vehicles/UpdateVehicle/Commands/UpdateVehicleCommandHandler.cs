@@ -24,11 +24,12 @@ public class UpdateVehicleCommandHandler : IUpdateVehicleCommandHandler
             return Result<VehicleDto>.Failure(new Error("VehicleNotFound", $"Vehicle with id {command.Id} not found."));
         }
 
-        var updatedVehicle = new Vehicle(command.Id, command.LicensePlate, command.Type, command.Owner);
-         _unitOfWork.Vehicles.Update(updatedVehicle);
+        vehicle.SetLicensePlate(command.LicensePlate);
+        vehicle.SetOwner(command.Owner);
+        vehicle.SetType(command.Type);
 
         await _unitOfWork.SaveChangesAsync();
 
-        return Result<VehicleDto>.Success(new VehicleDto(updatedVehicle.Id, updatedVehicle.LicensePlate, updatedVehicle.Owner));
+        return Result<VehicleDto>.Success(new VehicleDto(vehicle.Id, vehicle.LicensePlate, vehicle.Owner));
     }
 }

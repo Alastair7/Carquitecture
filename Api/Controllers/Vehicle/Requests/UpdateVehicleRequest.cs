@@ -2,8 +2,6 @@
 
 public class UpdateVehicleRequest
 {
-    public required int Id { get; set; }
-
     public required string LicensePlate { get; set; }
 
     public required string Type { get; set; }
