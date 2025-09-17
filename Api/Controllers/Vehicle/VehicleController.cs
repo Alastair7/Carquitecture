@@ -52,9 +52,9 @@ public class VehicleController : ControllerBase
             Owner = request.Owner
         };
 
-        await _createVehicleHandler.HandleAsync(command, cancellationToken);
+        var result = await _createVehicleHandler.HandleAsync(command, cancellationToken);
 
-        return Created();
+        return result.IsFailure ? BadRequest(result.Error) : Created();
     }
 
     [HttpGet]
@@ -62,7 +62,7 @@ public class VehicleController : ControllerBase
     {
         var result = await _getAllVehiclesHandler.HandleAsync(cancellationToken);
 
-        return Ok(result);
+        return Ok(result.Value);
     }
 
     [HttpGet("{id}")]
@@ -70,7 +70,7 @@ public class VehicleController : ControllerBase
     {
         var result = await _getVehicleByIdHandler.HandleAsync(id, cancellationToken);
 
-        return result is null ? NotFound(id) : Ok(result);
+        return result.IsFailure ? NotFound(result.Error) : Ok(result.Value);
     }
 
     // Add ID to route.
@@ -87,14 +87,14 @@ public class VehicleController : ControllerBase
 
         var result = await _updateVehicleHandler.HandleAsync(command, cancellationToken);
 
-        return Ok(result);
+        return result.IsFailure ? NotFound(result.Error) : Ok(result.Value);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {
-        await _deleteVehicleHandler.HandleAsync(id, cancellationToken);
+        var result = await _deleteVehicleHandler.HandleAsync(id, cancellationToken);
 
-        return NoContent();
+        return result.IsFailure ? NotFound(result.Error) : NoContent();
     }
 }

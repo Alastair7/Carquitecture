@@ -1,5 +1,6 @@
 ﻿
 using Carquitecture.Application.Repositories;
+using Carquitecture.Application.Shared.ErrorHandling;
 
 namespace Carquitecture.Application.Features.Vehicles.DeleteVehicle;
 
@@ -11,16 +12,18 @@ public class DeleteVehicleCommandHandler : IDeleteVehicleCommandHandler
     {
         _unitOfWork = unitOfWork;
     }
-    public async Task HandleAsync(int id, CancellationToken cancellationToken)
+    public async Task<BaseResult> HandleAsync(int id, CancellationToken cancellationToken)
     {
         var vehicle = await _unitOfWork.Vehicles.GetByIdAsync(id, cancellationToken);
 
         if (vehicle is null)
         {
-            throw new Exception($"Vehicle with id {id} not found.");
+            return BaseResult.Failure(new Error("VehicleNotFound", $"Vehicle with id {id} not found."));
         }
 
          _unitOfWork.Vehicles.Delete(vehicle);
         await _unitOfWork.SaveChangesAsync();
+
+        return BaseResult.Success();
     }
 }
