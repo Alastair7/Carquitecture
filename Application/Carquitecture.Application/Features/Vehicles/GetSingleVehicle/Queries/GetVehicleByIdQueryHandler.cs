@@ -5,16 +5,16 @@ namespace Carquitecture.Application.Features.Vehicles.GetSingleVehicle.Queries;
 
 public class GetVehicleByIdQueryHandler : IGetVehicleByIdQueryHandler
 {
-    private readonly IVehicleRepository _vehicleRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public GetVehicleByIdQueryHandler(IVehicleRepository vehicleRepository)
+    public GetVehicleByIdQueryHandler(IUnitOfWork unitOfWork)
     {
-        ArgumentNullException.ThrowIfNull(vehicleRepository, nameof(vehicleRepository));
-        _vehicleRepository = vehicleRepository;
+        ArgumentNullException.ThrowIfNull(unitOfWork, nameof(unitOfWork));
+        _unitOfWork = unitOfWork;
     }
     public async Task<VehicleDto?> HandleAsync(int id, CancellationToken cancellationToken)
     {
-        var result = await _vehicleRepository.GetById(id, cancellationToken);
+        var result = await _unitOfWork.Vehicles.GetByIdAsync(id, cancellationToken);
 
         if (result is null)
         {

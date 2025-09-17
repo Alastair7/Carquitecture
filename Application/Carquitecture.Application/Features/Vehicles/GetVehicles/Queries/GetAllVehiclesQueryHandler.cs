@@ -5,17 +5,17 @@ namespace Carquitecture.Application.Features.Vehicles.GetVehicles.Queries;
 
 public record GetAllVehiclesQueryHandler : IGetAllVehiclesQueryHandler
 {
-    private readonly IVehicleRepository _vehicleRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public GetAllVehiclesQueryHandler(IVehicleRepository vehicleRepository)
+    public GetAllVehiclesQueryHandler(IUnitOfWork unitOfWork)
     {
-        ArgumentNullException.ThrowIfNull(vehicleRepository, nameof(vehicleRepository));
-        _vehicleRepository = vehicleRepository;
+        ArgumentNullException.ThrowIfNull(unitOfWork, nameof(unitOfWork));
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<IEnumerable<VehicleDto>> HandleAsync(CancellationToken cancellationToken)
     {
-        var vehicles = await _vehicleRepository.GetAllAsync(cancellationToken);
+        var vehicles = await _unitOfWork.Vehicles.GetAllAsync(cancellationToken);
 
         return vehicles.Select(v => new VehicleDto(v.Id, v.LicensePlate, v.Owner));
     }

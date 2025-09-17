@@ -2,5 +2,5 @@
 
 public interface ICreateVehicleCommandHandler
 {
-    Task<int> HandleAsync(CreateVehicleCommand command, CancellationToken cancellationToken);
+    Task HandleAsync(CreateVehicleCommand command, CancellationToken cancellationToken);
 }

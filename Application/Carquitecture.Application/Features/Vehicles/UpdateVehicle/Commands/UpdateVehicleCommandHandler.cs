@@ -7,16 +7,16 @@ namespace Carquitecture.Application.Features.Vehicles.UpdateVehicle.Commands;
 
 public class UpdateVehicleCommandHandler : IUpdateVehicleCommandHandler
 {
-    private readonly IVehicleRepository _vehicleRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public UpdateVehicleCommandHandler(IVehicleRepository vehicleRepository)
+    public UpdateVehicleCommandHandler(IUnitOfWork unitOfWork)
     {
-        ArgumentNullException.ThrowIfNull(vehicleRepository, nameof(vehicleRepository));
-        _vehicleRepository = vehicleRepository;
+        ArgumentNullException.ThrowIfNull(unitOfWork, nameof(unitOfWork));
+        _unitOfWork = unitOfWork;
     }
     public async Task<VehicleDto> HandleAsync(UpdateVehicleCommand command, CancellationToken cancellationToken)
     {
-        var vehicle = await _vehicleRepository.GetById(command.Id, cancellationToken);
+        var vehicle = await _unitOfWork.Vehicles.GetByIdAsync(command.Id, cancellationToken);
 
         // Check exception performance and investigate and integrate result pattern.
         if (vehicle is null)
@@ -25,7 +25,9 @@ public class UpdateVehicleCommandHandler : IUpdateVehicleCommandHandler
         }
 
         var updatedVehicle = new Vehicle(command.Id, command.LicensePlate, command.Type, command.Owner);
-        await _vehicleRepository.UpdateAsync(updatedVehicle, cancellationToken);
+         _unitOfWork.Vehicles.Update(updatedVehicle);
+
+        await _unitOfWork.SaveChangesAsync();
 
         return new VehicleDto(updatedVehicle.Id, updatedVehicle.LicensePlate, updatedVehicle.Owner);
     }

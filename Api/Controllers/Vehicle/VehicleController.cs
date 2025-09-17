@@ -52,9 +52,9 @@ public class VehicleController : ControllerBase
             Owner = request.Owner
         };
 
-        var id = await _createVehicleHandler.HandleAsync(command, cancellationToken);
+        await _createVehicleHandler.HandleAsync(command, cancellationToken);
 
-        return Created($"/api/vehicle/{id}", id);
+        return Created();
     }
 
     [HttpGet]
