@@ -4,6 +4,7 @@ using Carquitecture.Application.Features.Vehicles.DeleteVehicle;
 using Carquitecture.Application.Features.Vehicles.GetSingleVehicle.Queries;
 using Carquitecture.Application.Features.Vehicles.GetVehicles.Queries;
 using Carquitecture.Application.Features.Vehicles.UpdateVehicle.Commands;
+using Carquitecture.Domain;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Carquitecture.API.Controllers.Vehicle;
@@ -49,7 +50,9 @@ public class VehicleController : ControllerBase
         {
             LicensePlate = request.LicensePlate,
             Type = request.Type,
-            Owner = request.Owner
+            Owner = request.Owner,
+            Seats = request.Seats.Select(s => new Seat(s.Material, s.Color))
+
         };
 
         var result = await _createVehicleHandler.HandleAsync(command, cancellationToken);

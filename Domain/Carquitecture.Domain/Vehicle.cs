@@ -2,10 +2,11 @@
 
 public class Vehicle
 {
-    public Vehicle(string licensePlate, string type, string owner) {
+    public Vehicle(string licensePlate, string type, string owner, IEnumerable<Seat> seats) {
         LicensePlate = licensePlate;
         Type = type;
         Owner = owner;
+        Seats = [.. seats];
     }
 
     public Vehicle(int id, string licensePlate, string type, string owner)

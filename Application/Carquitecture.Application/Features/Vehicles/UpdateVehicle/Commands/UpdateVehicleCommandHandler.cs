@@ -30,9 +30,13 @@ public class UpdateVehicleCommandHandler : IUpdateVehicleCommandHandler
         vehicle.SetLicensePlate(command.LicensePlate);
         vehicle.SetOwner(command.Owner);
         vehicle.SetType(command.Type);
+        vehicle.AddSeats(command.Seats);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return Result<VehicleDto>.Success(new VehicleDto(vehicle.Id, vehicle.LicensePlate, vehicle.Owner));
+        var seats = vehicle.Seats
+            .Select(s => new SeatDto(s.Id, s.Material, s.Color));
+
+        return Result<VehicleDto>.Success(new VehicleDto(vehicle.Id, vehicle.LicensePlate, vehicle.Owner, seats));
     }
 }

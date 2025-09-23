@@ -16,6 +16,11 @@ public class GetVehicleByIdQueryHandler : IGetVehicleByIdQueryHandler
     {
         var result = await _vehicleRepository.GetByIdAsync(id, cancellationToken);
 
-        return result is null ? default : new VehicleDto(result.Id, result.LicensePlate, result.Owner);
+        var seats = result?.Seats
+            .Select(s => new SeatDto(s.Id, s.Material, s.Color)) ?? [];
+
+        return result is null 
+            ? default 
+            : new VehicleDto(result.Id, result.LicensePlate, result.Owner, seats);
     }
 }

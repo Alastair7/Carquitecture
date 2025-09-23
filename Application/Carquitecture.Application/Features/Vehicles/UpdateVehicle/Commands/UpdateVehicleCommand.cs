@@ -1,4 +1,6 @@
-﻿namespace Carquitecture.Application.Features.Vehicles.UpdateVehicle.Commands;
+﻿using Carquitecture.Domain;
+
+namespace Carquitecture.Application.Features.Vehicles.UpdateVehicle.Commands;
 
 public class UpdateVehicleCommand
 {
@@ -6,4 +8,5 @@ public class UpdateVehicleCommand
     public string LicensePlate { get; init; } = string.Empty;
     public string Type { get; init; } = string.Empty;
     public string Owner { get; init; } = string.Empty;
+    public IEnumerable<Seat> Seats { get; init; } = [];
 }
