@@ -6,23 +6,22 @@ namespace Carquitecture.Application.Features.Vehicles.DeleteVehicle;
 
 public class DeleteVehicleCommandHandler : IDeleteVehicleCommandHandler
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IVehicleRepository _vehicleRepository;
 
-    public DeleteVehicleCommandHandler(IUnitOfWork unitOfWork)
+    public DeleteVehicleCommandHandler(IVehicleRepository vehicleRepository)
     {
-        _unitOfWork = unitOfWork;
+        _vehicleRepository = vehicleRepository;
     }
     public async Task<Result> HandleAsync(int id, CancellationToken cancellationToken)
     {
-        var vehicle = await _unitOfWork.Vehicles.GetByIdAsync(id, cancellationToken);
+        var vehicle = await _vehicleRepository.GetByIdAsync(id, cancellationToken);
 
         if (vehicle is null)
         {
             return Result.Failure(new Error("VehicleNotFound", $"Vehicle with id {id} not found."));
         }
 
-         _unitOfWork.Vehicles.Delete(vehicle);
-        await _unitOfWork.SaveChangesAsync();
+         _vehicleRepository.Delete(vehicle);
 
         return Result.Success();
     }

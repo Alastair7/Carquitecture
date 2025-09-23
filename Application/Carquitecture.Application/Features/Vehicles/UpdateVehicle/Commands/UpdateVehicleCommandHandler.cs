@@ -2,22 +2,21 @@
 using Carquitecture.Application.Features.Vehicles.Models;
 using Carquitecture.Application.Repositories;
 using Carquitecture.Application.Shared.ErrorHandling;
-using Carquitecture.Domain;
 
 namespace Carquitecture.Application.Features.Vehicles.UpdateVehicle.Commands;
 
 public class UpdateVehicleCommandHandler : IUpdateVehicleCommandHandler
 {
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IVehicleRepository _vehicleRepository;
 
-    public UpdateVehicleCommandHandler(IUnitOfWork unitOfWork)
+    public UpdateVehicleCommandHandler(IVehicleRepository vehicleRepository)
     {
-        ArgumentNullException.ThrowIfNull(unitOfWork, nameof(unitOfWork));
-        _unitOfWork = unitOfWork;
+        ArgumentNullException.ThrowIfNull(vehicleRepository, nameof(vehicleRepository));
+        _vehicleRepository = vehicleRepository;
     }
     public async Task<Result<VehicleDto>> HandleAsync(UpdateVehicleCommand command, CancellationToken cancellationToken)
     {
-        var vehicle = await _unitOfWork.Vehicles.GetByIdAsync(command.Id, cancellationToken);
+        var vehicle = await _vehicleRepository.GetByIdAsync(command.Id, cancellationToken);
 
         if (vehicle is null)
         { 
@@ -27,8 +26,6 @@ public class UpdateVehicleCommandHandler : IUpdateVehicleCommandHandler
         vehicle.SetLicensePlate(command.LicensePlate);
         vehicle.SetOwner(command.Owner);
         vehicle.SetType(command.Type);
-
-        await _unitOfWork.SaveChangesAsync();
 
         return Result<VehicleDto>.Success(new VehicleDto(vehicle.Id, vehicle.LicensePlate, vehicle.Owner));
     }

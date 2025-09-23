@@ -6,18 +6,17 @@ namespace Carquitecture.Application.Features.Vehicles.GetVehicles.Queries;
 
 public record GetAllVehiclesQueryHandler : IGetAllVehiclesQueryHandler
 {
-    // Use IVehicleRepository since it already implements unit of work interface.
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IVehicleRepository _vehicleRepository;
 
-    public GetAllVehiclesQueryHandler(IUnitOfWork unitOfWork)
+    public GetAllVehiclesQueryHandler(IVehicleRepository vehicleRepository)
     {
-        ArgumentNullException.ThrowIfNull(unitOfWork, nameof(unitOfWork));
-        _unitOfWork = unitOfWork;
+        ArgumentNullException.ThrowIfNull(vehicleRepository, nameof(vehicleRepository));
+        _vehicleRepository = vehicleRepository;
     }
 
     public async Task<Result<IEnumerable<VehicleDto>>> HandleAsync(CancellationToken cancellationToken)
     {
-        var vehicles = await _unitOfWork.Vehicles.GetAllAsync(cancellationToken);
+        var vehicles = await _vehicleRepository.GetAllAsync(cancellationToken);
 
         return Result<IEnumerable<VehicleDto>>
             .Success(vehicles.Select(v => new VehicleDto(v.Id, v.LicensePlate, v.Owner)));
