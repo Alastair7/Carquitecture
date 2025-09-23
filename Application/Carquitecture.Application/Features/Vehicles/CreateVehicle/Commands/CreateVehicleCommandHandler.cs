@@ -8,11 +8,15 @@ namespace Carquitecture.Application.Features.Vehicles.CreateVehicle.Commands;
 public class CreateVehicleCommandHandler : ICreateVehicleCommandHandler
 {
     private readonly IVehicleRepository _vehicleRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public CreateVehicleCommandHandler(IVehicleRepository vehicleRepository)
+    public CreateVehicleCommandHandler(IVehicleRepository vehicleRepository, IUnitOfWork unitOfWork)
     {
         ArgumentNullException.ThrowIfNull(vehicleRepository, nameof(vehicleRepository));
         _vehicleRepository = vehicleRepository;
+
+        ArgumentNullException.ThrowIfNull(unitOfWork, nameof(unitOfWork));
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result> HandleAsync(CreateVehicleCommand command, CancellationToken cancellationToken)
@@ -20,6 +24,8 @@ public class CreateVehicleCommandHandler : ICreateVehicleCommandHandler
         var vehicle = new Vehicle(command.LicensePlate, command.Type, command.Owner);
 
         await _vehicleRepository.AddAsync(vehicle, cancellationToken);
+
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return Result.Success();
     }

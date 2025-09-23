@@ -7,10 +7,12 @@ namespace Carquitecture.Application.Features.Vehicles.DeleteVehicle;
 public class DeleteVehicleCommandHandler : IDeleteVehicleCommandHandler
 {
     private readonly IVehicleRepository _vehicleRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public DeleteVehicleCommandHandler(IVehicleRepository vehicleRepository)
+    public DeleteVehicleCommandHandler(IVehicleRepository vehicleRepository, IUnitOfWork unitOfWork)
     {
         _vehicleRepository = vehicleRepository;
+        _unitOfWork = unitOfWork;
     }
     public async Task<Result> HandleAsync(int id, CancellationToken cancellationToken)
     {
@@ -22,6 +24,7 @@ public class DeleteVehicleCommandHandler : IDeleteVehicleCommandHandler
         }
 
          _vehicleRepository.Delete(vehicle);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return Result.Success();
     }
