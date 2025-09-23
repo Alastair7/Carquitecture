@@ -6,5 +6,5 @@ namespace Carquitecture.Application.Features.Vehicles.GetSingleVehicle.Queries;
 public interface IGetVehicleByIdQueryHandler
 {
     // Result should not be used for queries operations.
-    Task<Result<VehicleDto?>> HandleAsync(int id, CancellationToken cancellationToken);
+    Task<VehicleDto?> HandleAsync(int id, CancellationToken cancellationToken);
 }

@@ -14,11 +14,10 @@ public record GetAllVehiclesQueryHandler : IGetAllVehiclesQueryHandler
         _vehicleRepository = vehicleRepository;
     }
 
-    public async Task<Result<IEnumerable<VehicleDto>>> HandleAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<VehicleDto>> HandleAsync(CancellationToken cancellationToken)
     {
         var vehicles = await _vehicleRepository.GetAllAsync(cancellationToken);
 
-        return Result<IEnumerable<VehicleDto>>
-            .Success(vehicles.Select(v => new VehicleDto(v.Id, v.LicensePlate, v.Owner)));
+        return vehicles.Select(v => new VehicleDto(v.Id, v.LicensePlate, v.Owner));
     }
 }

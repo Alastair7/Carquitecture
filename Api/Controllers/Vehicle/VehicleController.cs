@@ -62,7 +62,7 @@ public class VehicleController : ControllerBase
     {
         var result = await _getAllVehiclesHandler.HandleAsync(cancellationToken);
 
-        return Ok(result.Value);
+        return Ok(result);
     }
 
     [HttpGet("{id}")]
@@ -70,7 +70,7 @@ public class VehicleController : ControllerBase
     {
         var result = await _getVehicleByIdHandler.HandleAsync(id, cancellationToken);
 
-        return result.IsFailure ? NotFound(result.Error) : Ok(result.Value);
+        return result is null ? NotFound() : Ok(result);
     }
 
     [HttpPut("{id}")]

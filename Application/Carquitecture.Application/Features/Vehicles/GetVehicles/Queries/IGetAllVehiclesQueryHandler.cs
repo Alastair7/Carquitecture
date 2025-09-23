@@ -5,5 +5,5 @@ namespace Carquitecture.Application.Features.Vehicles.GetVehicles.Queries;
 
 public interface IGetAllVehiclesQueryHandler
 {
-    Task<Result<IEnumerable<VehicleDto>>> HandleAsync(CancellationToken cancellationToken);
+    Task<IEnumerable<VehicleDto>> HandleAsync(CancellationToken cancellationToken);
 }
