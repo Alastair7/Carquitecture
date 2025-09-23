@@ -4,5 +4,5 @@ namespace Carquitecture.Application.Features.Vehicles.DeleteVehicle;
 
 public interface IDeleteVehicleCommandHandler
 {
-    Task<BaseResult> HandleAsync(int id, CancellationToken cancellationToken);
+    Task<Result> HandleAsync(int id, CancellationToken cancellationToken);
 }

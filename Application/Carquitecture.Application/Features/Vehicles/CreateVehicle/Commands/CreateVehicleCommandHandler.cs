@@ -15,13 +15,13 @@ public class CreateVehicleCommandHandler : ICreateVehicleCommandHandler
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<BaseResult> HandleAsync(CreateVehicleCommand command, CancellationToken cancellationToken)
+    public async Task<Result> HandleAsync(CreateVehicleCommand command, CancellationToken cancellationToken)
     {
         var vehicle = new Vehicle(command.LicensePlate, command.Type, command.Owner);
 
         await _unitOfWork.Vehicles.AddAsync(vehicle, cancellationToken);
         await _unitOfWork.SaveChangesAsync();
 
-        return BaseResult.Success();
+        return Result.Success();
     }
 }

@@ -6,6 +6,7 @@ namespace Carquitecture.Application.Features.Vehicles.GetVehicles.Queries;
 
 public record GetAllVehiclesQueryHandler : IGetAllVehiclesQueryHandler
 {
+    // Use IVehicleRepository since it already implements unit of work interface.
     private readonly IUnitOfWork _unitOfWork;
 
     public GetAllVehiclesQueryHandler(IUnitOfWork unitOfWork)

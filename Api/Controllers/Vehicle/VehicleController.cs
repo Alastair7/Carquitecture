@@ -73,7 +73,6 @@ public class VehicleController : ControllerBase
         return result.IsFailure ? NotFound(result.Error) : Ok(result.Value);
     }
 
-    // Add ID to route.
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateVehicleRequest request, CancellationToken cancellationToken)
     {

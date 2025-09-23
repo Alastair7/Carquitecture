@@ -1,9 +1,6 @@
-﻿using Carquitecture.Domain;
-
-namespace Carquitecture.Application.Repositories;
+﻿namespace Carquitecture.Application.Repositories;
 
 public interface IUnitOfWork : IDisposable
 {
-    IGenericRepository<Vehicle> Vehicles { get; }
-    Task<int> SaveChangesAsync();
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

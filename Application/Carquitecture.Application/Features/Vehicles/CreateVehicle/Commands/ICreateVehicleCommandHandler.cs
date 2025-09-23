@@ -4,5 +4,5 @@ namespace Carquitecture.Application.Features.Vehicles.CreateVehicle.Commands;
 
 public interface ICreateVehicleCommandHandler
 {
-    Task<BaseResult> HandleAsync(CreateVehicleCommand command, CancellationToken cancellationToken);
+    Task<Result> HandleAsync(CreateVehicleCommand command, CancellationToken cancellationToken);
 }
