@@ -24,6 +24,8 @@ public class Vehicle
 
     public string Owner { get; private set; } = string.Empty;
 
+    public ICollection<Seat> Seats { get; set; } = [];
+
     public void SetLicensePlate(string licensePlate)
     {
         LicensePlate = licensePlate;
@@ -37,5 +39,18 @@ public class Vehicle
     public void SetOwner(string owner)
     {
         Owner = owner;
+    }
+
+    public void AddSeat(Seat seat)
+    {
+        Seats.Add(seat);
+    }
+
+    public void AddSeats(IEnumerable<Seat> seats)
+    {
+        foreach (var seat in seats)
+        {
+            Seats.Add(seat);
+        }
     }
 }
