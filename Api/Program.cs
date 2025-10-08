@@ -22,7 +22,7 @@ builder.Services.AddScoped<IGetVehicleByIdQueryHandler, GetVehicleByIdQueryHandl
 builder.Services.AddScoped<IUpdateVehicleCommandHandler, UpdateVehicleCommandHandler>();
 builder.Services.AddScoped<IDeleteVehicleCommandHandler, DeleteVehicleCommandHandler>();
 
-builder.Services.AddScoped<IUnitOfWork, VehicleContext>();
+builder.Services.AddScoped<IUnitOfWork>(s => s.GetRequiredService<VehicleContext>());
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

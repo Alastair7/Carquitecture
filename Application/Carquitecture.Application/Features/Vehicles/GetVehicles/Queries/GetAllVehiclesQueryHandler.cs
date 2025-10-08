@@ -17,7 +17,7 @@ public record GetAllVehiclesQueryHandler : IGetAllVehiclesQueryHandler
     public async Task<IEnumerable<VehicleDto>> HandleAsync(CancellationToken cancellationToken)
     {
         // Why do I get only one record instead of the whole list with the relationships?
-        var vehicles = await _vehicleRepository.GetAllAsync(cancellationToken);
+        var vehicles = await _vehicleRepository.GetVehicleWithSeats();
 
         return vehicles.Select(v => new VehicleDto(
                               v.Id, 

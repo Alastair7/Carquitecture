@@ -14,6 +14,10 @@ public class VehicleContext : DbContext, IUnitOfWork
 
     public DbSet<Vehicle> Vehicles { get; set; }
 
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        return base.SaveChangesAsync(cancellationToken);
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         new VehicleEntityTypeConfiguration().Configure(modelBuilder.Entity<Vehicle>());
