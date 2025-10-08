@@ -5,6 +5,7 @@ using Carquitecture.Application.Features.Vehicles.GetSingleVehicle.Queries;
 using Carquitecture.Application.Features.Vehicles.GetVehicles.Queries;
 using Carquitecture.Application.Features.Vehicles.UpdateVehicle.Commands;
 using Carquitecture.Domain;
+using DispatchR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Carquitecture.API.Controllers.Vehicle;
@@ -14,33 +15,12 @@ namespace Carquitecture.API.Controllers.Vehicle;
 public class VehicleController : ControllerBase
 {
 
-    private readonly ICreateVehicleCommandHandler _createVehicleHandler;
-    private readonly IGetAllVehiclesQueryHandler _getAllVehiclesHandler;
-    private readonly IGetVehicleByIdQueryHandler _getVehicleByIdHandler;
-    private readonly IUpdateVehicleCommandHandler _updateVehicleHandler;
-    private readonly IDeleteVehicleCommandHandler _deleteVehicleHandler;
+    private readonly IMediator _mediator;
 
-    public VehicleController(ICreateVehicleCommandHandler createVehicleHandler,
-        IGetAllVehiclesQueryHandler getAllVehiclesHandler,
-        IGetVehicleByIdQueryHandler getVehicleByIdHandler,
-        IUpdateVehicleCommandHandler updateVehicleHandler,
-        IDeleteVehicleCommandHandler deleteVehicleHandler
-        )
+    public VehicleController(IMediator mediator)
     {
-        ArgumentNullException.ThrowIfNull(createVehicleHandler, nameof(createVehicleHandler));
-        _createVehicleHandler = createVehicleHandler;
-
-        ArgumentNullException.ThrowIfNull(getAllVehiclesHandler, nameof(getAllVehiclesHandler));
-        _getAllVehiclesHandler = getAllVehiclesHandler;
-
-        ArgumentNullException.ThrowIfNull(getVehicleByIdHandler, nameof(getVehicleByIdHandler));
-        _getVehicleByIdHandler = getVehicleByIdHandler;
-
-        ArgumentNullException.ThrowIfNull(updateVehicleHandler, nameof(updateVehicleHandler));
-        _updateVehicleHandler = updateVehicleHandler;
-
-        ArgumentNullException.ThrowIfNull(deleteVehicleHandler, nameof(deleteVehicleHandler));
-        _deleteVehicleHandler = deleteVehicleHandler;
+        ArgumentNullException.ThrowIfNull(mediator, nameof(mediator));
+        _mediator = mediator;
     }
 
     [HttpPost]
@@ -55,7 +35,7 @@ public class VehicleController : ControllerBase
 
         };
 
-        var result = await _createVehicleHandler.HandleAsync(command, cancellationToken);
+         var result = await _mediator.Send(command, cancellationToken);
 
         return result.IsFailure ? BadRequest(result.Error) : Created();
     }
@@ -63,7 +43,8 @@ public class VehicleController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
-        var result = await _getAllVehiclesHandler.HandleAsync(cancellationToken);
+        var query = new GetAllVehiclesQuery();
+        var result = await _mediator.Send(query, cancellationToken);
 
         return Ok(result);
     }
@@ -71,7 +52,8 @@ public class VehicleController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id, CancellationToken cancellationToken)
     {
-        var result = await _getVehicleByIdHandler.HandleAsync(id, cancellationToken);
+        var query = new GetVehicleByIdQuery(id);
+        var result = await _mediator.Send(query, cancellationToken);
 
         return result is null ? NotFound() : Ok(result);
     }
@@ -87,7 +69,7 @@ public class VehicleController : ControllerBase
             Owner = request.Owner
         };
 
-        var result = await _updateVehicleHandler.HandleAsync(command, cancellationToken);
+        var result = await _mediator.Send(command, cancellationToken);
 
         return result.IsFailure ? NotFound(result.Error) : Ok(result.Value);
     }
@@ -95,7 +77,8 @@ public class VehicleController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {
-        var result = await _deleteVehicleHandler.HandleAsync(id, cancellationToken);
+        var command = new DeleteVehicleCommand(id);
+        var result = await _mediator.Send(command, cancellationToken);
 
         return result.IsFailure ? NotFound(result.Error) : NoContent();
     }

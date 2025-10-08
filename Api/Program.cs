@@ -7,6 +7,7 @@ using Carquitecture.Application.Repositories;
 using Carquitecture.Infrastructure;
 using Carquitecture.Infrastructure.Data;
 using Carquitecture.Infrastructure.Repositories;
+using DispatchR.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,14 +17,14 @@ builder.Services.AddDbConfiguration(builder.Configuration);
 
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<ICreateVehicleCommandHandler, CreateVehicleCommandHandler>();
-builder.Services.AddScoped<IGetAllVehiclesQueryHandler, GetAllVehiclesQueryHandler>();
-builder.Services.AddScoped<IGetVehicleByIdQueryHandler, GetVehicleByIdQueryHandler>();
-builder.Services.AddScoped<IUpdateVehicleCommandHandler, UpdateVehicleCommandHandler>();
-builder.Services.AddScoped<IDeleteVehicleCommandHandler, DeleteVehicleCommandHandler>();
-
 builder.Services.AddScoped<IUnitOfWork>(s => s.GetRequiredService<VehicleContext>());
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
+
+builder.Services.AddDispatchR(typeof(CreateVehicleCommandHandler).Assembly);
+builder.Services.AddDispatchR(typeof(GetVehicleByIdQueryHandler).Assembly);
+builder.Services.AddDispatchR(typeof(GetAllVehiclesQueryHandler).Assembly);
+builder.Services.AddDispatchR(typeof(DeleteVehicleCommandHandler).Assembly);
+builder.Services.AddDispatchR(typeof(UpdateVehicleCommandHandler).Assembly);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

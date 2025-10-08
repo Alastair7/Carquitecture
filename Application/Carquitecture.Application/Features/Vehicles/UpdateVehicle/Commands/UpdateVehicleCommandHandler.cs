@@ -2,10 +2,11 @@
 using Carquitecture.Application.Features.Vehicles.Models;
 using Carquitecture.Application.Repositories;
 using Carquitecture.Application.Shared.ErrorHandling;
+using DispatchR.Abstractions.Send;
 
 namespace Carquitecture.Application.Features.Vehicles.UpdateVehicle.Commands;
 
-public class UpdateVehicleCommandHandler : IUpdateVehicleCommandHandler
+public class UpdateVehicleCommandHandler : IRequestHandler<UpdateVehicleCommand, Task<Result<VehicleDto>>>
 {
     private readonly IVehicleRepository _vehicleRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -18,19 +19,20 @@ public class UpdateVehicleCommandHandler : IUpdateVehicleCommandHandler
         ArgumentNullException.ThrowIfNull(unitOfWork, nameof(unitOfWork));
         _unitOfWork = unitOfWork;
     }
-    public async Task<Result<VehicleDto>> HandleAsync(UpdateVehicleCommand command, CancellationToken cancellationToken)
+
+    public async Task<Result<VehicleDto>> Handle(UpdateVehicleCommand request, CancellationToken cancellationToken)
     {
-        var vehicle = await _vehicleRepository.GetByIdAsync(command.Id, cancellationToken);
+        var vehicle = await _vehicleRepository.GetByIdAsync(request.Id, cancellationToken);
 
         if (vehicle is null)
-        { 
-            return Result<VehicleDto>.Failure(new Error("VehicleNotFound", $"Vehicle with id {command.Id} not found."));
+        {
+            return Result<VehicleDto>.Failure(new Error("VehicleNotFound", $"Vehicle with id {request.Id} not found."));
         }
 
-        vehicle.SetLicensePlate(command.LicensePlate);
-        vehicle.SetOwner(command.Owner);
-        vehicle.SetType(command.Type);
-        vehicle.AddSeats(command.Seats);
+        vehicle.SetLicensePlate(request.LicensePlate);
+        vehicle.SetOwner(request.Owner);
+        vehicle.SetType(request.Type);
+        vehicle.AddSeats(request.Seats);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

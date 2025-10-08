@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DispatchR.Mediator" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Domain\Carquitecture.Domain\Carquitecture.Domain.csproj" />
   </ItemGroup>
 
