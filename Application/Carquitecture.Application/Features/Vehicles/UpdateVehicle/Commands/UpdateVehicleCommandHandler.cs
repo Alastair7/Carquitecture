@@ -34,6 +34,7 @@ public class UpdateVehicleCommandHandler : IRequestHandler<UpdateVehicleCommand,
         vehicle.SetType(request.Type);
         vehicle.AddSeats(request.Seats);
 
+        _vehicleRepository.Update(vehicle);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         var seats = vehicle.Seats

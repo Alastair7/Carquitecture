@@ -14,6 +14,9 @@ public class VehicleRepository : GenericRepository<Vehicle>, IVehicleRepository
 
     public async Task<IEnumerable<Vehicle>> GetVehicleWithSeats() 
     {
-        return await _context.Set<Vehicle>().Include(v => v.Seats).ToListAsync();
+        return await _context.Set<Vehicle>()
+            .AsNoTracking()
+            .Include(v => v.Seats)
+            .ToListAsync();
     }
 }
