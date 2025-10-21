@@ -30,9 +30,8 @@ public class VehicleController : ControllerBase
         {
             LicensePlate = request.LicensePlate,
             Type = request.Type,
-            Owner = request.Owner,
+            Owners = [.. request.Owners.Select(o => new Owner(o.Name, o.Surname, o.Active))],
             Seats = request.Seats.Select(s => new Seat(s.Material, s.Color))
-
         };
 
          var result = await _mediator.Send(command, cancellationToken);
@@ -66,7 +65,7 @@ public class VehicleController : ControllerBase
             Id = id,
             LicensePlate = request.LicensePlate,
             Type = request.Type,
-            Owner = request.Owner
+            Owners = request.Owners
         };
 
         var result = await _mediator.Send(command, cancellationToken);

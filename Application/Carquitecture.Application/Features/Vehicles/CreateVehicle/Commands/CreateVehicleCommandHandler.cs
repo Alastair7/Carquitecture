@@ -22,18 +22,10 @@ public class CreateVehicleCommandHandler : IRequestHandler<CreateVehicleCommand,
 
     public async Task<Result> Handle(CreateVehicleCommand request, CancellationToken cancellationToken)
     {
-        var vehicle = new Vehicle(request.LicensePlate, request.Type, request.Owner, request.Seats);
+        var seats = request.Seats.Select(s => new Seat(s.Material, s.Color)).ToList();
+        var owners = request.Owners.Select(o => new Owner(o.Name, o.Surname, o.Active)).ToList();
 
-        await _vehicleRepository.AddAsync(vehicle, cancellationToken);
-
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
-
-        return Result.Success();
-    }
-
-    public async Task<Result> HandleAsync(CreateVehicleCommand command, CancellationToken cancellationToken)
-    {
-        var vehicle = new Vehicle(command.LicensePlate, command.Type, command.Owner, command.Seats);
+        var vehicle = new Vehicle(request.LicensePlate, request.Type, owners, seats);
 
         await _vehicleRepository.AddAsync(vehicle, cancellationToken);
 

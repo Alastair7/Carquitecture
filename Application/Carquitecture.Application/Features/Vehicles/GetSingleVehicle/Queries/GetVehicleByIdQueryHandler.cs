@@ -21,8 +21,11 @@ public class GetVehicleByIdQueryHandler : IRequestHandler<GetVehicleByIdQuery, T
         var seats = result?.Seats
             .Select(s => new SeatDto(s.Id, s.Material, s.Color)) ?? [];
 
+        var owners = result?.Owners
+            .Select(o => new OwnerDto(o.Id, o.Name, o.Surname, o.Active)) ?? [];
+
         return result is null
             ? default
-            : new VehicleDto(result.Id, result.LicensePlate, result.Owner, seats);
+            : new VehicleDto(result.Id, result.LicensePlate, owners, seats);
     }
 }

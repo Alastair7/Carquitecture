@@ -12,11 +12,12 @@ public class VehicleRepository : GenericRepository<Vehicle>, IVehicleRepository
     {
     }
 
-    public async Task<IEnumerable<Vehicle>> GetVehicleWithSeats() 
+    public async Task<IEnumerable<Vehicle>> GetVehicleWithRelationships() 
     {
         return await _context.Set<Vehicle>()
             .AsNoTracking()
             .Include(v => v.Seats)
+            .Include(v => v.Owners)
             .ToListAsync();
     }
 }

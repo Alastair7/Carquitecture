@@ -8,7 +8,7 @@ public class UpdateVehicleRequest
 
     public required string Type { get; set; }
 
-    public required string Owner { get; set; }
+    public required IEnumerable<OwnerDto> Owners { get; set; }
 
     public IEnumerable<SeatDto> Seats { get; set; } = [];
 }

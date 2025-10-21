@@ -16,12 +16,12 @@ public record GetAllVehiclesQueryHandler : IRequestHandler<GetAllVehiclesQuery, 
 
     public async Task<IEnumerable<VehicleDto>> Handle(GetAllVehiclesQuery request, CancellationToken cancellationToken)
     {
-        var vehicles = await _vehicleRepository.GetVehicleWithSeats();
+        var vehicles = await _vehicleRepository.GetVehicleWithRelationships();
 
         return vehicles.Select(v => new VehicleDto(
                               v.Id,
                               v.LicensePlate,
-                              v.Owner,
+                              v.Owners.Select(o => new OwnerDto(o.Id, o.Name, o.Surname, o.Active)),
                               v.Seats.Select(s => new SeatDto(s.Id, s.Material, s.Color))
                               )
             );

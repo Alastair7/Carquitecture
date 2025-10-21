@@ -10,6 +10,6 @@ public class UpdateVehicleCommand : IRequest<UpdateVehicleCommand, Task<Result<V
     public int Id { get; init; }
     public string LicensePlate { get; init; } = string.Empty;
     public string Type { get; init; } = string.Empty;
-    public string Owner { get; init; } = string.Empty;
-    public IEnumerable<Seat> Seats { get; init; } = [];
+    public IEnumerable<OwnerDto> Owners { get; init; } = [];
+    public IEnumerable<SeatDto> Seats { get; init; } = [];
 }

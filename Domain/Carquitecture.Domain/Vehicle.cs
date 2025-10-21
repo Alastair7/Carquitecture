@@ -2,19 +2,21 @@
 
 public class Vehicle
 {
-    public Vehicle(string licensePlate, string type, string owner, IEnumerable<Seat> seats) {
+    private Vehicle() { }
+
+    public Vehicle(string licensePlate, string type, ICollection<Owner> owners, IEnumerable<Seat> seats) {
         LicensePlate = licensePlate;
         Type = type;
-        Owner = owner;
+        Owners = owners;
         Seats = [.. seats];
     }
 
-    public Vehicle(int id, string licensePlate, string type, string owner)
+    public Vehicle(int id, string licensePlate, string type, ICollection<Owner> owners)
     {
         Id = id;
         LicensePlate = licensePlate;
         Type = type;
-        Owner = owner;
+        Owners = owners;
     }
 
     public int Id { get; private set; }
@@ -23,7 +25,7 @@ public class Vehicle
 
     public string Type { get; private set; } = string.Empty;
 
-    public string Owner { get; private set; } = string.Empty;
+    public ICollection<Owner> Owners { get; } = [];
 
     public ICollection<Seat> Seats { get; set; } = [];
 
@@ -37,9 +39,19 @@ public class Vehicle
         Type = type;
     }
 
-    public void SetOwner(string owner)
+    public void AddOwner(Owner owner)
     {
-        Owner = owner;
+        Owners.Add(owner);
+    }
+
+    public void ClearThenAddOwners(IEnumerable<Owner> owners)
+    {
+        Owners.Clear();
+
+        foreach (var owner in owners)
+        {
+            Owners.Add(owner);
+        }
     }
 
     public void AddSeat(Seat seat)
@@ -47,8 +59,10 @@ public class Vehicle
         Seats.Add(seat);
     }
 
-    public void AddSeats(IEnumerable<Seat> seats)
+    public void ClearThenAddSeats(IEnumerable<Seat> seats)
     {
+        Seats.Clear();
+
         foreach (var seat in seats)
         {
             Seats.Add(seat);

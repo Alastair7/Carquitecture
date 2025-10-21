@@ -4,5 +4,5 @@ namespace Carquitecture.Application.Repositories;
 
 public interface IVehicleRepository : IGenericRepository<Vehicle>
 {
-    Task<IEnumerable<Vehicle>> GetVehicleWithSeats();
+    Task<IEnumerable<Vehicle>> GetVehicleWithRelationships();
 }
