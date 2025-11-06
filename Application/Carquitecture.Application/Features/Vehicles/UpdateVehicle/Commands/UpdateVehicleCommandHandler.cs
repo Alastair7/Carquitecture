@@ -36,7 +36,13 @@ public class UpdateVehicleCommandHandler : IRequestHandler<UpdateVehicleCommand,
         var seats = request.Seats
             .Select(s => new Seat(s.Material, s.Color)).ToList();
 
-        vehicle.SetLicensePlate(request.LicensePlate);
+        var licensePlate = new LicensePlate
+        {
+            PlateNumber = request.LicensePlate.PlateNumber,
+            Country = request.LicensePlate.Country
+        };
+
+        vehicle.SetLicensePlate(licensePlate);
         vehicle.ClearThenAddOwners(owners);
         vehicle.SetType(request.Type);
         vehicle.ClearThenAddSeats(seats);
@@ -50,6 +56,6 @@ public class UpdateVehicleCommandHandler : IRequestHandler<UpdateVehicleCommand,
         var ownersDto = vehicle.Owners
             .Select(o => new OwnerDto(o.Id, o.Name, o.Surname, o.Active));
 
-        return Result<VehicleDto>.Success(new VehicleDto(vehicle.Id, vehicle.LicensePlate, ownersDto, seatsDto));
+        return Result<VehicleDto>.Success(new VehicleDto(vehicle.Id, new LicensePlateDto(vehicle.LicensePlate.PlateNumber, vehicle.LicensePlate.Country), ownersDto, seatsDto));
     }
 }

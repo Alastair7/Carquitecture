@@ -26,6 +26,6 @@ public class GetVehicleByIdQueryHandler : IRequestHandler<GetVehicleByIdQuery, T
 
         return result is null
             ? default
-            : new VehicleDto(result.Id, result.LicensePlate, owners, seats);
+            : new VehicleDto(result.Id, new LicensePlateDto(result.LicensePlate.PlateNumber, result.LicensePlate.Country), owners, seats);
     }
 }

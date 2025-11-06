@@ -4,6 +4,7 @@ using Carquitecture.Application.Shared.Behaviors;
 using Carquitecture.Infrastructure;
 using Carquitecture.Infrastructure.Data;
 using Carquitecture.Infrastructure.Repositories;
+using DispatchR.Abstractions.Send;
 using DispatchR.Extensions;
 using FluentValidation;
 
@@ -19,19 +20,16 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IUnitOfWork>(s => s.GetRequiredService<VehicleContext>());
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 
-builder.Services.AddTransient<IValidator<CreateVehicleCommand>, CreateVehicleCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateVehicleCommand>();
 
-builder.Services.AddDispatchR(typeof(CreateVehicleCommandHandler).Assembly, withPipelines: true);
 
-builder.Services.AddDispatchR(options =>
-{
-    options.Assemblies.Add(typeof(CreateVehicleCommandHandler).Assembly);
-    options.RegisterPipelines = true;
-    options.PipelineOrder = [
-        typeof(LoggingBehavior<,>),
-        typeof(ValidationBehavior<,>)
-        ];
-});
+builder.Services.AddDispatchR(typeof(CreateVehicleCommandHandler).Assembly, withPipelines: false);
+
+// DispatchR Pipeline Behaviors
+// Had to set "withPipelines" to false to be able to register custom pipeline behaviors
+// LoggingBehavior implements ICommand so it will be applied only to commands and DispatchR does not know how to register it automatically
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

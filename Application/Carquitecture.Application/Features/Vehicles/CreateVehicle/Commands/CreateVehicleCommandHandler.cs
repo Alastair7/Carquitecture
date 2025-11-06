@@ -25,7 +25,14 @@ public class CreateVehicleCommandHandler : IRequestHandler<CreateVehicleCommand,
         var seats = request.Seats.Select(s => new Seat(s.Material, s.Color)).ToList();
         var owners = request.Owners.Select(o => new Owner(o.Name, o.Surname, o.Active)).ToList();
 
-        var vehicle = new Vehicle(request.LicensePlate, request.Type, owners, seats);
+        var licensePlate = new LicensePlate
+        {
+            PlateNumber = request.LicensePlate.PlateNumber,
+            Country = request.LicensePlate.Country
+        };
+        var vehicle = new Vehicle(licensePlate, request.Type);
+        vehicle.ClearThenAddOwners(owners);
+        vehicle.ClearThenAddSeats(seats);
 
         await _vehicleRepository.AddAsync(vehicle, cancellationToken);
 

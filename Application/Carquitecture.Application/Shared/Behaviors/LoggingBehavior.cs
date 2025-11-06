@@ -1,23 +1,26 @@
-﻿using DispatchR.Abstractions.Send;
+﻿using Carquitecture.Application.Shared.Abstractions;
+using DispatchR.Abstractions.Send;
 using Microsoft.Extensions.Logging;
 
 namespace Carquitecture.Application.Shared.Behaviors;
 
-public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, Task<TResponse>>
-    where TRequest : class, IRequest<TRequest, Task<TResponse>>
+public class LoggingBehavior<TCommand, TResponse>
+    : IPipelineBehavior<TCommand, Task<TResponse>>
+    where TCommand : class, ICommand<TCommand, TResponse>
 {
-    private readonly ILogger<LoggingBehavior<TRequest, TResponse>> _logger;
+    private readonly ILogger<LoggingBehavior<TCommand, TResponse>> _logger;
 
-    public LoggingBehavior(ILogger<LoggingBehavior<TRequest, TResponse>> logger)
+    public LoggingBehavior(ILogger<LoggingBehavior<TCommand, TResponse>> logger)
     {
         _logger = logger;
     }
 
-    public required IRequestHandler<TRequest, Task<TResponse>> NextPipeline { get; set; }
+    public required IRequestHandler<TCommand, Task<TResponse>> NextPipeline { get; set; }
 
-    public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken)
+    public async Task<TResponse> Handle(TCommand request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Handling {RequestType} with data: {@RequestData}", typeof(TRequest).Name, request);
+        // Create generic behavior that only gets the command.
+        _logger.LogInformation("Handling {RequestType} with data: {@RequestData}", typeof(TCommand).Name, request);
         try
         {
             var handlerResponse =  await NextPipeline.Handle(request, cancellationToken);

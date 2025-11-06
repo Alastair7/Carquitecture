@@ -20,7 +20,7 @@ public record GetAllVehiclesQueryHandler : IRequestHandler<GetAllVehiclesQuery, 
 
         return vehicles.Select(v => new VehicleDto(
                               v.Id,
-                              v.LicensePlate,
+                              new LicensePlateDto(v.LicensePlate.PlateNumber, v.LicensePlate.Country),
                               v.Owners.Select(o => new OwnerDto(o.Id, o.Name, o.Surname, o.Active)),
                               v.Seats.Select(s => new SeatDto(s.Id, s.Material, s.Color))
                               )

@@ -1,35 +1,49 @@
-﻿namespace Carquitecture.Domain;
+﻿using Carquitecture.Domain.Abstractions;
 
-public class Vehicle
+namespace Carquitecture.Domain;
+
+public sealed class LicensePlate : ValueObject
 {
+    public string PlateNumber { get; init; } = string.Empty;
+    public string Country { get; init; } = string.Empty;
+
+    protected override IEnumerable<object> GetAtomicValues()
+    {
+        yield return PlateNumber;
+        yield return Country;
+    }
+}
+
+public class Vehicle : IAggregateRoot
+{
+    private readonly List<Owner> _owners = [];
+    private readonly List<Seat> _seats = [];
+
     private Vehicle() { }
 
-    public Vehicle(string licensePlate, string type, ICollection<Owner> owners, IEnumerable<Seat> seats) {
+    public Vehicle(LicensePlate licensePlate, string type) {
         LicensePlate = licensePlate;
         Type = type;
-        Owners = owners;
-        Seats = [.. seats];
     }
 
-    public Vehicle(int id, string licensePlate, string type, ICollection<Owner> owners)
+    public Vehicle(int id, LicensePlate licensePlate, string type)
     {
         Id = id;
         LicensePlate = licensePlate;
         Type = type;
-        Owners = owners;
     }
 
     public int Id { get; private set; }
 
-    public string LicensePlate { get; private set; } = string.Empty;
+    public LicensePlate LicensePlate { get; private set; }
 
     public string Type { get; private set; } = string.Empty;
 
-    public ICollection<Owner> Owners { get; } = [];
+    public IReadOnlyCollection<Owner> Owners => _owners.AsReadOnly();
+    public IReadOnlyCollection<Seat> Seats => _seats.AsReadOnly();
 
-    public ICollection<Seat> Seats { get; set; } = [];
 
-    public void SetLicensePlate(string licensePlate)
+    public void SetLicensePlate(LicensePlate licensePlate)
     {
         LicensePlate = licensePlate;
     }
@@ -41,31 +55,31 @@ public class Vehicle
 
     public void AddOwner(Owner owner)
     {
-        Owners.Add(owner);
+        _owners.Add(owner);
     }
 
     public void ClearThenAddOwners(IEnumerable<Owner> owners)
     {
-        Owners.Clear();
+        _owners.Clear();
 
         foreach (var owner in owners)
         {
-            Owners.Add(owner);
+            _owners.Add(owner);
         }
     }
 
     public void AddSeat(Seat seat)
     {
-        Seats.Add(seat);
+        _seats.Add(seat);
     }
 
     public void ClearThenAddSeats(IEnumerable<Seat> seats)
     {
-        Seats.Clear();
+        _seats.Clear();
 
         foreach (var seat in seats)
         {
-            Seats.Add(seat);
+            _seats.Add(seat);
         }
     }
 }

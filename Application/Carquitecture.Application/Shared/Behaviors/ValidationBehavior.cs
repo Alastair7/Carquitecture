@@ -1,4 +1,5 @@
-﻿using DispatchR.Abstractions.Send;
+﻿using Carquitecture.Application.Shared.Abstractions;
+using DispatchR.Abstractions.Send;
 using FluentValidation;
 
 namespace Carquitecture.Application.Shared.Behaviors;
