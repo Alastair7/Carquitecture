@@ -13,8 +13,8 @@ internal class VehicleEntityTypeConfiguration : IEntityTypeConfiguration<Vehicle
 
         builder.ComplexProperty(property => property.LicensePlate);
 
-        builder.HasMany(v => v.Owners)
-            .WithMany(o => o.Vehicles)
-            .UsingEntity(vo => vo.ToTable("VehicleOwner"));
+        builder.HasMany(v => v.VehicleOwners)
+            .WithOne(vo => vo.Vehicle)
+            .HasForeignKey(vo => vo.VehicleId);
     }
 }

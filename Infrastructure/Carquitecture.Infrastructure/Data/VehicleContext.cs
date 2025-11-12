@@ -21,5 +21,6 @@ public class VehicleContext : DbContext, IUnitOfWork
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         new VehicleEntityTypeConfiguration().Configure(modelBuilder.Entity<Vehicle>());
+        new VehicleOwnerEntityTypeConfiguration().Configure(modelBuilder.Entity<VehicleOwner>());
     }
 }

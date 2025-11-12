@@ -39,6 +39,8 @@ public class Vehicle : IAggregateRoot
 
     public string Type { get; private set; } = string.Empty;
 
+    public ICollection<VehicleOwner> VehicleOwners { get; private set; } = [];
+
     public IReadOnlyCollection<Owner> Owners => _owners.AsReadOnly();
     public IReadOnlyCollection<Seat> Seats => _seats.AsReadOnly();
 
