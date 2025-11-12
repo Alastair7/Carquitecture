@@ -1,6 +1,7 @@
 using Carquitecture.Application.Features.Vehicles.CreateVehicle.Commands;
 using Carquitecture.Application.Repositories;
 using Carquitecture.Application.Shared.Behaviors;
+using Carquitecture.Application.Shared.ErrorHandling;
 using Carquitecture.Infrastructure;
 using Carquitecture.Infrastructure.Data;
 using Carquitecture.Infrastructure.Repositories;
@@ -28,8 +29,8 @@ builder.Services.AddDispatchR(typeof(CreateVehicleCommandHandler).Assembly, with
 // DispatchR Pipeline Behaviors
 // Had to set "withPipelines" to false to be able to register custom pipeline behaviors
 // LoggingBehavior implements ICommand so it will be applied only to commands and DispatchR does not know how to register it automatically
-builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
-builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+builder.Services.AddScoped(typeof(IPipelineBehavior<CreateVehicleCommand,Task<Result>>), typeof(LoggingBehavior<CreateVehicleCommand,Result>));
+builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
