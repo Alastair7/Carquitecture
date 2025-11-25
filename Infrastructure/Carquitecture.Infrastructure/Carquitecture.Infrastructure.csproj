@@ -15,4 +15,8 @@
     <ProjectReference Include="..\..\Application\Carquitecture.Application\Carquitecture.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\Migrations\" />
+  </ItemGroup>
+
 </Project>

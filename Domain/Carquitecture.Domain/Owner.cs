@@ -18,5 +18,4 @@ public class Owner
     public bool Active { get; set; }
 
     public ICollection<Vehicle> Vehicles { get; } = [];
-    public ICollection<VehicleOwner> VehicleOwners { get; private set; } = [];
 }

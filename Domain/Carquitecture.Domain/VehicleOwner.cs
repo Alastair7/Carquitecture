@@ -3,10 +3,10 @@
 public class VehicleOwner
 {
     public int VehicleId { get; set; }
-    public Vehicle Vehicle { get; set; } = null!;
+    public required Vehicle Vehicle { get; set; }
 
     public int OwnerId { get; set; }
-    public Owner Owner { get; set; } = null!;
+    public required Owner Owner { get; set; }
 
     public bool IsOwnerActive { get; set; }
 }

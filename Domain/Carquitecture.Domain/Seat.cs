@@ -16,5 +16,5 @@ public class Seat
 
     public int VehicleId { get; set; }
 
-    public Vehicle Vehicle { get; set; } = null!;
+    public Vehicle Vehicle { get; set; }
 }

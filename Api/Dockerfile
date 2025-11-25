@@ -23,7 +23,7 @@ COPY . .
 WORKDIR "/src/Api"
 RUN dotnet build "./Carquitecture.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-# It compiles the app and its dependencies and prepares it for deployment
+#  Prepare it for deployment by creating the .dll
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./Carquitecture.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Carquitecture.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(VehicleContext))]
-    [Migration("20251112192136_manyToManyWithJoinClass")]
-    partial class manyToManyWithJoinClass
+    [Migration("20251125122057_initialCreate")]
+    partial class initialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,7 +46,7 @@ namespace Carquitecture.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Owner");
+                    b.ToTable("Owner", (string)null);
                 });
 
             modelBuilder.Entity("Carquitecture.Domain.Seat", b =>
@@ -116,26 +116,16 @@ namespace Carquitecture.Infrastructure.Data.Migrations
                     b.Property<bool>("IsOwnerActive")
                         .HasColumnType("boolean");
 
+                    b.Property<int>("OwnersId")
+                        .HasColumnType("integer");
+
                     b.HasKey("VehicleId", "OwnerId");
 
                     b.HasIndex("OwnerId");
 
+                    b.HasIndex("OwnersId");
+
                     b.ToTable("VehicleOwners", (string)null);
-                });
-
-            modelBuilder.Entity("OwnerVehicle", b =>
-                {
-                    b.Property<int>("OwnersId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("VehiclesId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("OwnersId", "VehiclesId");
-
-                    b.HasIndex("VehiclesId");
-
-                    b.ToTable("OwnerVehicle");
                 });
 
             modelBuilder.Entity("Carquitecture.Domain.Seat", b =>
@@ -152,13 +142,19 @@ namespace Carquitecture.Infrastructure.Data.Migrations
             modelBuilder.Entity("Carquitecture.Domain.VehicleOwner", b =>
                 {
                     b.HasOne("Carquitecture.Domain.Owner", "Owner")
-                        .WithMany("VehicleOwners")
+                        .WithMany()
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Carquitecture.Domain.Owner", null)
+                        .WithMany()
+                        .HasForeignKey("OwnersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Carquitecture.Domain.Vehicle", "Vehicle")
-                        .WithMany("VehicleOwners")
+                        .WithMany()
                         .HasForeignKey("VehicleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -168,31 +164,9 @@ namespace Carquitecture.Infrastructure.Data.Migrations
                     b.Navigation("Vehicle");
                 });
 
-            modelBuilder.Entity("OwnerVehicle", b =>
-                {
-                    b.HasOne("Carquitecture.Domain.Owner", null)
-                        .WithMany()
-                        .HasForeignKey("OwnersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Carquitecture.Domain.Vehicle", null)
-                        .WithMany()
-                        .HasForeignKey("VehiclesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Carquitecture.Domain.Owner", b =>
-                {
-                    b.Navigation("VehicleOwners");
-                });
-
             modelBuilder.Entity("Carquitecture.Domain.Vehicle", b =>
                 {
                     b.Navigation("Seats");
-
-                    b.Navigation("VehicleOwners");
                 });
 #pragma warning restore 612, 618
         }
