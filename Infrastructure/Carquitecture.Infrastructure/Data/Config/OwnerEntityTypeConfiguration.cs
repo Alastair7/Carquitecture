@@ -10,8 +10,8 @@ internal class OwnerEntityTypeConfiguration : IEntityTypeConfiguration<Owner>
     {
         builder.ToTable("Owners");
 
-        builder.HasMany(v => v.VehicleOwners)
-            .WithOne(vo => vo.Owner)
-            .HasForeignKey(vo => vo.OwnerId);
+        //builder.HasMany(v => v.VehicleOwners)
+        //    .WithOne(vo => vo.Owner)
+        //    .HasForeignKey(vo => vo.OwnerId);
     }
 }
