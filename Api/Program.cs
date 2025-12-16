@@ -12,7 +12,7 @@ using FluentValidation;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbConfiguration(builder.Configuration);
+builder.Services.AddDbConfiguration();
 builder.Services.AddLogging();
 
 

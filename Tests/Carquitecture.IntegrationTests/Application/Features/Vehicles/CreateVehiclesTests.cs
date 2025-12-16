@@ -37,7 +37,7 @@ public class CreateVehiclesTests : IClassFixture<CustomWebApplicationFactory>
             ]
         };
         // Act
-        var response = await client.PostAsJsonAsync("/api/vehicles", newVehicle);
+        var response = await client.PostAsJsonAsync("/api/vehicle", newVehicle);
         // Assert
         response.EnsureSuccessStatusCode();
     }

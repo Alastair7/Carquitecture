@@ -7,12 +7,16 @@ namespace Carquitecture.Infrastructure;
 
 public static class StartupExtensions
 {
-    public static IServiceCollection AddDbConfiguration(this IServiceCollection services, IConfiguration configuration) 
+    public static IServiceCollection AddDbConfiguration(this IServiceCollection services) 
     {
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        services.AddDbContext<VehicleContext>((sp, options) => 
+        {
+            var configuration = sp.GetRequiredService<IConfiguration>();
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-        return services.AddDbContext<VehicleContext>(
-            options => options.UseNpgsql(connectionString)
-            );
+            options.UseNpgsql(connectionString);
+        });
+
+        return services;
     }
 }
